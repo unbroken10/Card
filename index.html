@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinay weds Samridhy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --cream: #f8ecd9; --backdrop: #3b3248; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--backdrop);
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    color: var(--cream);
+  }
+   #audio-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 12px 18px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-family: sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  #audio-toggle-btn:hover {
+    background-color: #333333;
+    transform: scale(1.05);
+  }
+  /* ============ SECTION 1: first background image + Hello world ============ */
+  .section-1 {
+    position: relative;
+    width: 100%;                  /* full device width */
+    aspect-ratio: 1500 / 4074;    /* height follows the width */
+    container-type: inline-size;
+    overflow: hidden;
+  }
+
+  /* Section 1 is built from stacked layers, bottom to top:
+       .s1-sky   the new image (replaces the old purple colour)
+       .aurora   the moving aurora lights
+       .s1-front the invitation image (same images as before)
+       .hello    the Hello world text */
+  .s1-layer { position: absolute; inset: 0; pointer-events: none; background-repeat: no-repeat; }
+  .s1-sky {
+    z-index: 0;
+    background-image: url("https://framerusercontent.com/images/SAiqx4062cIfrUZAKXHjclFjemk.png");
+    background-size: cover;
+    background-position: center top;
+  }
+  .s1-front {
+    z-index: 2;
+    background-image:
+      url("bg.png"),
+      url("https://framerusercontent.com/images/tXna2Dh4YtGJ9FfDGqaTr9FknA.png");
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  /* Text: centred on the first screen, inside the page so it scrolls up with it.
+     --p (0 to 1) is set by the script below from the scroll position, so as you
+     scroll down the text rises a little faster than the page, grows, blurs and
+     fades. Scrolling back up reverses it. */
+  .hello {
+    --p: 0;
+    z-index: 3;
+    position: absolute;
+    left: 0; right: 0;
+    top: 50vh;                    /* fallback */
+    top: 50svh;
+    transform: translateY(calc(-50% - var(--p) * 18svh)) scale(calc(1 + var(--p) * 0.3));
+    opacity: calc(1 - var(--p) * 1.25);
+    filter: blur(calc(var(--p) * 6px));
+    will-change: transform, opacity, filter;
+    text-align: center;
+    pointer-events: none;
+  }
+  .hello h1 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 11cqw;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-shadow: 0 0 24px rgba(255, 236, 200, 0.55), 0 2px 12px rgba(40, 20, 60, 0.6);
+    animation: float 5s ease-in-out infinite;
+  }
+  .hello .greet {
+    display: block;
+    position: relative;
+    margin-top: 2.4cqw;
+    font-size: 5.2cqw;
+    letter-spacing: 0.18em;
+    min-height: 1.2em;
+    text-shadow: 0 1px 10px rgba(40, 20, 60, 0.7);
+    animation: float 5s ease-in-out -2.5s infinite;
+  }
+  .greet span { display: inline-block; position: absolute; left: 0; right: 0; opacity: 0; animation: swap 12s linear infinite; }
+  .greet span:nth-child(2) { animation-delay: 3s; }
+  .greet span:nth-child(3) { animation-delay: 6s; }
+  .greet span:nth-child(4) { animation-delay: 9s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2.2cqw); }
+  }
+  @keyframes swap {
+    0% { opacity: 0; }
+    4%, 22% { opacity: 1; }
+    28%, 100% { opacity: 0; }
+  }
+
+  /* Aurora lights: a soft, slowly moving green glow drawn by the script below.
+     It sits between the two images and is blended with "screen" so it only
+     ever adds light. */
+  .aurora {
+    position: absolute;
+    z-index: 1;                   /* above the new image, behind the invitation image */
+    left: 0;
+    top: -8%;                      /* raise or lower the aurora by changing this */
+    width: 100%;
+    height: 30%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: .9;
+    filter: blur(7px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent);
+            mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent);
+  }
+
+  /* ============ SECTION 2: second background image ============ */
+  .section-2 {
+    position: relative;
+    width: 100%;                  /* full device width */
+    aspect-ratio: 3 / 4;          /* placeholder; the script sets the image's real ratio */
+    background-color: var(--backdrop);
+    background-image: url("https://framerusercontent.com/images/sJqR6OVqniA4os9dxzynmhlLp8.png");
+    background-size: 100% auto;   /* same look as before, but never stretched if the section grows */
+    background-repeat: repeat-y;
+    container-type: inline-size;  /* lets the text below scale with the screen width */
+  }
+
+  /* Invitation content on top of the second image.
+     Everything is sized in cqw (1cqw = 1% of the screen width), so the layout
+     scales together with the background at every screen size. */
+  .invite {
+    position: relative;
+    padding: 21.5cqw 0 20cqw;     /* same top position as before, plus room at the bottom */
+    text-align: center;
+    color: #f4e8d2;
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  }
+  .invite .om {
+    margin: 0;
+    font-family: "Noto Serif Devanagari", "Cormorant Garamond", serif;
+    font-size: 4.2cqw;
+    line-height: 1.5;
+  }
+  .invite .ganesha {
+    display: block;
+    width: 33cqw;
+    height: auto;
+    margin: 3.5cqw auto 0;
+  }
+  .invite .blessing {
+    margin: 11.75cqw 0 0;
+    font-size: 4.6cqw;
+    font-weight: 500;
+    line-height: 8.3cqw;
+  }
+  .invite .divider {
+    width: 8.5cqw;
+    height: 1px;
+    margin: 5.3cqw auto 0;
+    background: #f4e8d2;
+    opacity: .8;
+  }
+  .invite .parents {
+    margin: 5.9cqw 0 0;
+    font-size: 4.6cqw;
+    font-weight: 500;
+    line-height: 8.3cqw;
+  }
+  .invite .title {
+    margin: 15.3cqw 0 0;
+    font-size: 20cqw;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: #f8edc4;
+  }
+
+  /* Below INVITE: same font family, sized in cqw so it scales with the screen */
+  .invite .lead,
+  .invite .names,
+  .invite .daughter,
+  .invite .events {
+    color: #f6ebc6;
+  }
+  .invite .lead {
+    margin: 17.35cqw 0 0;
+    font-size: 3.7cqw;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+  .invite .names {
+    margin: 13.2cqw 0 0;
+    font-size: 18.5cqw;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .invite .names span { display: block; }
+  .invite .daughter {
+    margin: 13.95cqw 0 0;
+    font-size: 4cqw;
+    font-weight: 500;
+    line-height: 7.6cqw;
+  }
+  .invite .events {
+    margin: 10.4cqw 0 0;
+    font-size: 4cqw;
+    font-weight: 500;
+    line-height: 7.6cqw;
+  }
+
+  /* Gold ring frames, one after another. The picture sits behind the frame. */
+  .ring { margin-top: 14cqw; color: #f6ebc6; }
+  .ring-art {
+    position: relative;
+    width: 98cqw;
+    margin: 0 auto;
+    aspect-ratio: 417 / 574;      /* the script below replaces this with the frame's real ratio */
+  }
+  .ring-photo {
+    position: absolute;
+    left: 12.2%; top: 21.8%;
+    width: 78.6%; height: 69.4%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #5d3170;
+    display: grid;
+    place-items: center;
+    z-index: 1;
+  }
+  .ring-photo img { width: 90%; height: auto; display: block; }
+  .ring-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ring-title {
+    margin: 6.25cqw 0 0;
+    font-size: 11.5cqw;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .ring-meta {
+    margin: 3cqw 0 0;
+    font-size: 3.5cqw;
+    font-weight: 500;
+    line-height: 3.6cqw;
+  }
+
+  /* Scratch to Reveal */
+  .scratch { margin-top: 24cqw; color: #f6ebc6; }
+  .scratch-title {
+    margin: 0;
+    font-size: 11cqw;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .scratch-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3cqw;
+    margin-top: 5cqw;
+  }
+  .scratch-divider i { display: block; width: 15cqw; height: 1px; background: #f6ebc6; opacity: .5; }
+  .scratch-divider svg { width: 3.2cqw; height: auto; fill: #e8c27a; }
+
+  .scratch-card {
+    position: relative;
+    width: 70cqw;
+    aspect-ratio: 100 / 95;
+    margin: 8cqw auto 0;
+    filter: drop-shadow(0 2cqw 4cqw rgba(20, 5, 35, .45));
+  }
+  .scratch-reveal {
+    position: absolute;
+    inset: 0;
+    clip-path: url(#heartClip);
+    background: #f8edc4;
+    color: #3a1c4a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4cqw;
+    text-align: center;
+  }
+  .scratch-reveal .date { font-size: 5.4cqw; font-weight: 700; line-height: 1.1; }
+  .scratch-reveal .day  { font-size: 4.2cqw; font-weight: 600; line-height: 1.4; color: #7a3d73; }
+  .scratch-reveal .time { font-size: 3.6cqw; font-weight: 600; line-height: 1.4; }
+  .scratch-card canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none;           /* lets a finger scratch instead of scrolling */
+    cursor: grab;
+    transition: opacity .8s ease;
+  }
+  .scratch-card.revealed canvas { opacity: 0; pointer-events: none; }
+
+  .save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.4cqw;
+    margin-top: 10cqw;
+    padding: 4cqw 8cqw;
+    border-radius: 999px;
+    background: #f6ebc6;
+    color: #3a1c4a;
+    font-size: 4cqw;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 3cqw 6cqw rgba(20, 5, 35, .35);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .save-btn svg { width: 5cqw; height: 5cqw; flex: none; }
+  .save-btn:hover { background: #fff6d8; transform: translateY(-.5cqw); }
+  .save-btn:focus-visible { outline: 3px solid #e8c27a; outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scratch-card canvas, .save-btn { transition: none; }
+  }
+
+  /* Map card inside an envelope.
+     The envelope (back + front images) is pinned in the centre of the screen.
+     Only the card moves: as the background scrolls about 100% of a screen height,
+     the card slides down into the envelope, between the back and the front.
+     --u is one "unit" (1% of the screen width, but capped so the envelope always
+     fits on short or wide screens). --pp (0 to 1) is set by the script below. */
+  .map-pin-wrap {
+    --pp: 0;
+    height: 200vh;                /* fallback */
+    height: 200svh;               /* 100% pinned screen + 100% extra scroll */
+    margin-top: 18cqw;
+  }
+  .map-pin-stick {
+    --u: min(1cqw, .58svh);
+    position: sticky;
+    top: 0;
+    height: 100vh;                /* fallback */
+    height: 100svh;
+    display: grid;
+    place-items: center;
+  }
+  .envelope {
+    position: relative;
+    width: calc(88 * var(--u));
+    transform: translateY(calc(12 * var(--u)));   /* sits a bit lower on the screen; raise or lower the 12 to adjust */
+  }
+  .envelope-back  { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
+  .envelope-front { position: absolute; z-index: 3; left: 0; bottom: 0; display: block; width: 100%; height: auto; pointer-events: none; }
+
+  .map-card {
+    position: absolute;
+    z-index: 2;                   /* above the back, below the front pocket */
+    left: 11.1%;
+    width: 77.8%;                 /* fits inside the visible pocket */
+    top: 23.7%;                   /* where the card rests inside the envelope */
+    transform: translateY(calc((1 - var(--pp)) * -52 * var(--u)));
+    filter: drop-shadow(0 calc(2 * var(--u)) calc(4 * var(--u)) rgba(20, 5, 35, .35));
+  }
+  .map-card > img { display: block; width: 100%; height: auto; }
+  .map-card .map-text {
+    position: absolute;
+    left: 0; right: 0;
+    top: 31%;
+    transform: translateY(-50%);
+    margin: 0;
+    font-size: calc(6.6 * var(--u));
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    color: #6b2d6b;
+    text-align: center;
+  }
+  .map-card .map-link {
+    position: absolute;
+    left: 31%; width: 38%;
+    top: 71%;
+    transform: translateY(-50%);
+    display: block;
+  }
+  .map-card .map-link img { display: block; width: 100%; height: auto; }
+
+  /* Tap target over the flower button on the envelope front: opens the map */
+  .seal-link {
+    position: absolute;
+    z-index: 4;
+    left: 42%; width: 15.2%;
+    top: 47.1%; height: 10.1%;
+    border-radius: 50%;
+    transition: box-shadow .25s ease;
+  }
+  .seal-link:hover { box-shadow: 0 0 0 .8cqw rgba(246, 235, 198, .55); }
+  .seal-link:focus-visible { outline: 3px solid #f6ebc6; outline-offset: 4px; }
+
+  /* ============ LAST SECTION: footer image on top, aurora lights between, background image below ============ */
+  .footer {
+    position: relative;
+    width: 100%;                  /* full device width */
+    aspect-ratio: 4 / 5;          /* placeholder; the script sets it so only the top 80% of the footer image shows */
+    container-type: inline-size;
+    overflow: hidden;
+  }
+  .f-layer { position: absolute; inset: 0; pointer-events: none; background-repeat: no-repeat; }
+  .f-sky {                        /* bottom layer: the background image */
+    z-index: 0;
+    background-image: url("https://framerusercontent.com/images/SAiqx4062cIfrUZAKXHjclFjemk.png");
+    background-size: cover;
+    background-position: center top;
+  }
+  .aurora-f {                     /* middle layer: the aurora lights */
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 10%;                     /* raise or lower the aurora by changing this */
+    width: 100%;
+    height: 45%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: .9;
+    filter: blur(7px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent);
+            mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent);
+  }
+  .f-front {                      /* top layer: the footer image, full width, bottom 20% cut off */
+    z-index: 2;
+    background-image: url("https://framerusercontent.com/images/YSN8jyDT7Ocn99jskpAataqlrQc.png");
+    background-size: 100% auto;
+    background-position: top center;
+  }
+
+  /* Soft fade at the top of the last section: the purple of the section above melts
+     into the picture, which gives the countdown a calm, dark area to sit on. */
+  .f-fade {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 36cqw;
+    z-index: 2;                   /* above the footer image, below the countdown */
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(48, 18, 72, .95) 0%, rgba(48, 18, 72, .82) 55%, rgba(48, 18, 72, 0) 100%);
+  }
+
+  /* Live countdown at the top of the last section (above the aurora lights).
+     No boxes or panels behind it: the numbers stay readable on their own through a
+     soft glow and a dark edge shadow. Sizes are in cqw so it scales with the screen. */
+  .countdown {
+    position: absolute;
+    z-index: 3;                   /* above the footer image and the aurora */
+    left: 0; right: 0;
+    top: 4%;                      /* raise or lower the countdown by changing this */
+    text-align: center;
+    pointer-events: none;
+    color: #fff3d2;
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  }
+  .cd-caption {
+    margin: 0 0 3cqw;
+    font-size: 3.4cqw;
+    font-weight: 600;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: #c4f5fb;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, .6);
+  }
+  .cd-row { display: flex; justify-content: center; align-items: flex-start; gap: 1.6cqw; }
+  .cd-unit { min-width: 17cqw; }
+  .cd-num {
+    position: relative;
+    display: block;
+    font-size: 12cqw;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: lining-nums tabular-nums;
+    text-shadow: 0 0 .3em rgba(0, 210, 230, .6), 0 2px 10px rgba(0, 0, 0, .7), 0 0 2px rgba(0, 0, 0, .6);
+  }
+  .cd-num .cur { display: block; }
+  /* when a number changes: the old one floats up and fades, the new one rises in */
+  .cd-num .cur.in { animation: cdIn .55s cubic-bezier(.2, .85, .25, 1); }
+  .cd-num .out {
+    position: absolute; left: 0; right: 0; top: 0;
+    animation: cdOut .5s cubic-bezier(.4, 0, .8, .4) forwards;
+  }
+  @keyframes cdIn  { from { opacity: 0; transform: translateY(.35em) scale(.9); filter: blur(5px); } }
+  @keyframes cdOut { to   { opacity: 0; transform: translateY(-.35em) scale(.9); filter: blur(5px); } }
+  .cd-label {
+    margin-top: 1.2cqw;
+    font-size: 3cqw;
+    font-weight: 600;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: #c4f5fb;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .75), 0 0 2px rgba(0, 0, 0, .6);
+  }
+  .cd-sep {
+    font-size: 9cqw;
+    line-height: 1.35;
+    color: #9eeaf3;
+    text-shadow: 0 0 .4em rgba(0, 210, 230, .6), 0 2px 8px rgba(0, 0, 0, .7);
+    animation: cdPulse 1s ease-in-out infinite;
+  }
+  @keyframes cdPulse { 0%, 100% { opacity: .85; } 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) {
+    .cd-num .cur.in, .cd-num .out, .cd-sep { animation: none; }
+  }
+
+  /* Soft seam: the bottom of section 1 melts into the purple of section 2 */
+  .section-1::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 16cqw;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(60, 22, 84, 0), rgba(60, 22, 84, .92));
+  }
+
+  /* Scroll reveals: each item eases in the first time it comes on screen.
+     The script adds .reveal (hidden) and then .in (plays the animation). */
+  .reveal:not(.in) { opacity: 0; }
+  .reveal.in {
+    animation: rvUp 1s cubic-bezier(.22, .8, .24, 1) var(--d, 0ms) backwards;
+  }
+  .reveal.in[data-rv="zoom"]  { animation-name: rvZoom; }
+  .reveal.in[data-rv="left"]  { animation-name: rvLeft; }
+  .reveal.in[data-rv="right"] { animation-name: rvRight; }
+  .reveal.in[data-rv="grow"]  { animation-name: rvGrow; }
+  .reveal.in[data-rv="ring"]  { animation-name: rvRing; animation-duration: 1.2s; }
+  .reveal.in[data-rv="focus"] { animation-name: rvFocus; animation-duration: 1.3s; }
+  .reveal.in[data-rv="fade"]  { animation-name: rvFade; }
+
+  @keyframes rvUp    { from { opacity: 0; transform: translateY(7cqw); filter: blur(8px); } }
+  @keyframes rvZoom  { from { opacity: 0; transform: translateY(4cqw) scale(.82); } }
+  @keyframes rvLeft  { from { opacity: 0; transform: translateX(-14cqw); filter: blur(6px); } }
+  @keyframes rvRight { from { opacity: 0; transform: translateX(14cqw); filter: blur(6px); } }
+  @keyframes rvGrow  { from { opacity: 0; transform: scaleX(0); } }
+  @keyframes rvRing  { from { opacity: 0; transform: translateY(10cqw) scale(.9) rotate(-2deg); } }
+  @keyframes rvFocus { from { opacity: 0; transform: scale(1.14); filter: blur(12px); } }
+  @keyframes rvFade  { from { opacity: 0; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hello h1, .hello .greet { animation: none; }
+    .greet span { animation: none; opacity: 0; }
+    .greet span:first-child { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <audio id="bg-audio" loop>
+      <source src="./src/bgAudio.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <!-- Section 1 -->
+     <button id="audio-toggle-btn" aria-label="Play background music">
+      ▶️ 
+    </button>
+     <canvas class="aurora" aria-hidden="true"></canvas>
+    <section class="section-1">
+      <div class="s1-layer s1-sky"></div>                          <!-- new image (bottom) -->
+      <canvas class="aurora" aria-hidden="true"></canvas>          <!-- aurora lights (between) -->
+      <div class="s1-layer s1-front"></div>                        <!-- invitation image (top) -->
+      <div class="hello">
+        <h1><span>Vinay</span><br/><span>&amp;</span><br/><span>Samridhy</span></h1>
+        <span class="greet" aria-hidden="true">
+          <span>Hello</span>
+          <span>नमस्ते</span>
+          <span>Hola</span>
+          <span>Bonjour</span>
+        </span>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="section-2">
+      <div class="invite">
+        <p class="om">ॐ श्री गणेशाय नमः</p>
+        <img class="ganesha" src="https://framerusercontent.com/images/tjsmDC8g305SmMs98B3ABqR5QE.png" alt="Lord Ganesha">
+        <p class="blessing">With the heavenly blessings of<br>Smt. Vidhya Devi &amp; Sm. CL Bhardwaj</p>
+        <div class="divider"></div>
+        <p class="parents">Late Mrs. Nirmala &amp; Mr. Hari Shankar</p>
+        <h2 class="title">INVITE</h2>
+        <p class="lead">You to join us in the wedding celebrations of</p>
+        <h3 class="names"><span>Vinay</span><span>&amp;</span><span>Samridhy</span></h3>
+        <p class="events">On the following events</p>
+
+        <!-- Ring 1: to change a picture, replace the src inside .ring-photo -->
+        <article class="ring">
+          <div class="ring-art">
+            <div class="ring-photo"><img src="./src/lagan.jfif" alt=""></div>
+            <img class="ring-frame" src="https://framerusercontent.com/images/z5W1OnFP0tsTwdOyKZIKloLXPN4.png" alt="">
+          </div>
+          <h3 class="ring-title">Lagan Tika</h3>
+          <p class="ring-meta">Monday, December 7th<br>Radhey Krishna Garden, Bahadurgarh, HR</p>
+        </article>
+
+        <!-- Ring 2 -->
+        <article class="ring">
+          <div class="ring-art">
+            <div class="ring-photo"><img src="./src/haldi.jfif" alt=""></div>
+            <img class="ring-frame" src="https://framerusercontent.com/images/z5W1OnFP0tsTwdOyKZIKloLXPN4.png" alt="">
+          </div>
+          <h3 class="ring-title">Haldi</h3>
+          <p class="ring-meta">Wednesday, December 9th<br>Bahadurgarh, HR</p>
+        </article>
+
+        <!-- Ring 3 -->
+        <article class="ring">
+          <div class="ring-art">
+            <div class="ring-photo"><img src="./src/mehendi.jfif" alt=""></div>
+            <img class="ring-frame" src="https://framerusercontent.com/images/z5W1OnFP0tsTwdOyKZIKloLXPN4.png" alt="">
+          </div>
+          <h3 class="ring-title">Mehandi</h3>
+          <p class="ring-meta">Thursday, December 10th<br>Bahadurgarh, HR</p>
+        </article>
+
+        <!-- Ring 4 -->
+        <article class="ring">
+          <div class="ring-art">
+            <div class="ring-photo"><img src="./src/dj.jfif" alt=""></div>
+            <img class="ring-frame" src="https://framerusercontent.com/images/z5W1OnFP0tsTwdOyKZIKloLXPN4.png" alt="">
+          </div>
+          <h3 class="ring-title">DJ Night</h3>
+          <p class="ring-meta">Thursday, December 10th<br>Bahadurgarh, HR</p>
+        </article>
+
+        <!-- Scratch to Reveal -->
+        <div class="scratch">
+          <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+            <defs>
+              <clipPath id="heartClip" clipPathUnits="objectBoundingBox">
+                <path transform="scale(0.01 0.010526)" d="M50 90 C20 62 2 45 2 26 C2 12 13 3 26 3 C36 3 45 9 50 18 C55 9 64 3 74 3 C87 3 98 12 98 26 C98 45 80 62 50 90 Z"/>
+              </clipPath>
+            </defs>
+          </svg>
+
+          <h2 class="scratch-title">Scratch to Reveal</h2>
+          <div class="scratch-divider" aria-hidden="true">
+            <i></i>
+            <svg viewBox="0 0 24 22"><path d="M12 21 C5 15 1 11 1 7 C1 3.5 3.5 1.5 6.5 1.5 C9 1.5 11 3 12 5 C13 3 15 1.5 17.5 1.5 C20.5 1.5 23 3.5 23 7 C23 11 19 15 12 21 Z"/></svg>
+            <i></i>
+          </div>
+
+          <div class="scratch-card">
+            <div class="scratch-reveal">
+              <div class="date">December 11, 2026</div>
+              <div class="day">Friday From</div>
+              <div class="time">10:00 AM</div>
+              
+            </div>
+            <canvas tabindex="0" aria-label="Scratch card. Scratch the heart, or press Enter, to reveal the date."></canvas>
+          </div>
+
+          <a class="save-btn" target="_blank" rel="noopener noreferrer"
+             href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Vinay%20weds%Samridhy&amp;dates=20261231T103000/20261231T113000">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M12 13v5M9.5 15.5h5"/>
+            </svg>
+            Save the date
+          </a>
+        </div>
+
+        <!-- Map card in an envelope: envelope images stay fixed, only the card moves -->
+        <div class="map-pin-wrap">
+          <div class="map-pin-stick">
+            
+            <div class="envelope">
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <img class="envelope-back" src="https://framerusercontent.com/images/mMubCJzGVyMYNAhiO2JLkyiGgw.png" alt="">
+
+              <div class="map-card">
+                <img src="https://framerusercontent.com/images/0fSxrRtMEUfItl1Bb3JHmmb8E.png" alt="">
+                <p class="map-text">CLICK<br>TO OPEN THE<br> WEDDING VENUE<br>MAP</p>
+                <a class="map-link" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
+                   href="https://www.google.com/maps/search/?api=1&amp;query=JW+Marriott+Mussoorie">
+                  <img src="https://framerusercontent.com/images/otI5vKCMNuewnDAktHQdLYLRo.png" alt="">
+                </a>
+              </div>
+
+              <img class="envelope-front" src="https://framerusercontent.com/images/XwSCDVqVhhtF52j1Mhe9pVs31M.png" alt="">
+
+              <!-- Replace the href with your venue's Google Maps link -->
+              <a class="seal-link" target="_blank" rel="noopener noreferrer" aria-label="Open the venue on the map"
+                 href="https://www.google.com/maps/search/?api=1&amp;query=JW+Marriott+Mussoorie"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Last section: footer image (top), aurora lights (between), background image (bottom) -->
+    <footer class="footer">
+      <div class="f-layer f-sky"></div>
+      <canvas class="aurora-f" aria-hidden="true"></canvas>
+      <div class="f-layer f-front"></div>
+
+      <div class="f-fade"></div>                                  <!-- soft fade behind the countdown -->
+
+      <!-- Live countdown to the wedding -->
+      <div class="countdown" role="timer" aria-label="Countdown to the wedding">
+        <p class="cd-caption">Counting down to the big day</p>
+        <div class="cd-row">
+          <div class="cd-unit"><span class="cd-num" data-unit="days"><span class="cur">00</span></span><div class="cd-label">Days</div></div>
+          <span class="cd-sep" aria-hidden="true">:</span>
+          <div class="cd-unit"><span class="cd-num" data-unit="hours"><span class="cur">00</span></span><div class="cd-label">Hours</div></div>
+          <span class="cd-sep" aria-hidden="true">:</span>
+          <div class="cd-unit"><span class="cd-num" data-unit="minutes"><span class="cur">00</span></span><div class="cd-label">Minutes</div></div>
+          <span class="cd-sep" aria-hidden="true">:</span>
+          <div class="cd-unit"><span class="cd-num" data-unit="seconds"><span class="cur">00</span></span><div class="cd-label">Seconds</div></div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+<script>
+
+  const audio = document.getElementById('bg-audio');
+  const toggleBtn = document.getElementById('audio-toggle-btn');
+
+  toggleBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      toggleBtn.textContent = '⏸️';
+      toggleBtn.setAttribute('aria-label', 'Pause background music');
+    } else {
+      audio.pause();
+      toggleBtn.textContent = '▶️';
+      toggleBtn.setAttribute('aria-label', 'Play background music');
+    }
+  }); 
+  // Scroll animation for the Hello world text (reverses when scrolling up)
+  (function () {
+    var hello = document.querySelector(".hello");
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var queued = false;
+    function update() {
+      queued = false;
+      var p = Math.min(Math.max(window.scrollY / (window.innerHeight * 0.8), 0), 1);
+      hello.style.setProperty("--p", p.toFixed(3));
+    }
+    function onScroll() {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    }
+    if (!reduce) {
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      update();
+    }
+  })();
+
+  // Aurora lights: fast, darker green ribbons that ripple outwards from the middle
+  (function () {
+    var cv = document.querySelector(".aurora");
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext("2d");
+    var section = cv.parentElement;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // c = colour (darker greens), sp = speed (bigger = faster), a = strength
+    var ribbons = [
+      { c: "0,190,210",  base: .66, amp: .16, f: 1.6, sp: 4.6,  ph: 0.0, h: .55, a: .85 },
+      { c: "0,160,200",  base: .60, amp: .14, f: 2.4, sp: -5.4, ph: 2.0, h: .50, a: .70 },
+      { c: "10,205,220", base: .72, amp: .12, f: 1.1, sp: 3.8,  ph: 4.0, h: .45, a: .75 }
+    ];
+    var visible = true, last = 0, t0 = performance.now();
+
+    function size() {
+      var r = cv.getBoundingClientRect();          // drawn small and scaled up: it is blurred anyway
+      cv.width = Math.max(Math.round(r.width / 3), 60);
+      cv.height = Math.max(Math.round(r.height / 3), 30);
+    }
+
+    function draw(now) {
+      var t = (now - t0) / 1000, W = cv.width, H = cv.height, steps = 48;
+      var pulse = 1 + 0.25 * Math.sin(t * 2.6);    // the whole glow breathes quickly
+      ctx.globalCompositeOperation = "source-over";
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "lighter";
+      ribbons.forEach(function (r) {
+        var bot = [], top = [];
+        var amp = r.amp * (1 + 0.35 * Math.sin(t * 1.9 + r.ph));
+        for (var i = 0; i <= steps; i++) {
+          var x = i / steps;
+          var d = Math.abs(x - 0.5) * 2;           // 0 in the middle, 1 at the sides
+          // waves travel outwards from the middle
+          var w1 = Math.sin(d * r.f * 6.283 - t * r.sp + r.ph);
+          var w2 = Math.sin(d * r.f * 2.1 * 6.283 - t * r.sp * 1.4 + r.ph * 1.7);
+          var yb = (r.base + amp * (0.7 * w1 + 0.3 * w2)) * H;
+          var hh = r.h * (0.7 + 0.3 * Math.sin(d * 6 - t * 3.4 + r.ph)) * (1 + 0.2 * (1 - d) * Math.sin(t * 4 + r.ph)) * H;
+          bot.push([x * W, yb]);
+          top.push([x * W, yb - hh]);
+        }
+        var a = Math.min(1, r.a * pulse);
+        var y0 = (r.base - r.h - r.amp * 1.4) * H, y1 = (r.base + r.amp * 1.4) * H;
+        var g = ctx.createLinearGradient(0, y0, 0, y1);
+        g.addColorStop(0, "rgba(" + r.c + ",0)");
+        g.addColorStop(0.6, "rgba(" + r.c + "," + (a * 0.5) + ")");
+        g.addColorStop(0.95, "rgba(" + r.c + "," + a + ")");
+        g.addColorStop(1, "rgba(" + r.c + "," + (a * 0.6) + ")");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.moveTo(bot[0][0], bot[0][1]);
+        for (var j = 1; j < bot.length; j++) ctx.lineTo(bot[j][0], bot[j][1]);
+        for (var k = top.length - 1; k >= 0; k--) ctx.lineTo(top[k][0], top[k][1]);
+        ctx.closePath();
+        ctx.fill();
+      });
+      // strongest in the middle, fading out towards both sides
+      ctx.globalCompositeOperation = "destination-in";
+      var m = ctx.createLinearGradient(0, 0, W, 0);
+      m.addColorStop(0, "rgba(0,0,0,.08)");
+      m.addColorStop(0.25, "rgba(0,0,0,.6)");
+      m.addColorStop(0.5, "rgba(0,0,0,1)");
+      m.addColorStop(0.75, "rgba(0,0,0,.6)");
+      m.addColorStop(1, "rgba(0,0,0,.08)");
+      ctx.fillStyle = m;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function loop(now) {
+      if (visible && now - last > 16) { last = now; draw(now); }   // about 60 frames a second
+      requestAnimationFrame(loop);
+    }
+
+    size();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { size(); draw(performance.now()); }).observe(cv);
+    }
+    if (reduce) { draw(t0 + 2000); return; }                       // one still frame, no movement
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(section);
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // Scroll reveals: ease each item in the first time it comes on screen
+  (function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) return;   // then everything simply stays visible
+    // [selector, style, delay in ms]
+    var items = [
+      [".invite .om", "up", 0],
+      [".invite .ganesha", "zoom", 120],
+      [".invite .blessing", "up", 0],
+      [".invite .divider", "grow", 0],
+      [".invite .parents", "up", 100],
+      [".invite .title", "focus", 0],
+      [".invite .lead", "up", 0],
+      [".invite .names span:nth-child(1)", "left", 0],
+      [".invite .names span:nth-child(2)", "zoom", 150],
+      [".invite .names span:nth-child(3)", "right", 300],
+      [".invite .daughter", "up", 0],
+      [".invite .events", "up", 120],
+      [".scratch-title", "up", 0],
+      [".scratch-divider", "fade", 150],
+      [".scratch-card", "zoom", 250],
+      [".save-btn", "up", 0]
+    ];
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          var t = e.target;
+          (t._parts || [t]).forEach(function (x) { x.classList.add("in"); });   // all parts at the same moment
+          io.unobserve(t);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+    // Each gold ring: the frame, the title and the details come in together
+    document.querySelectorAll(".ring").forEach(function (ring) {
+      var parts = [];
+      [[".ring-art", "ring"], [".ring-title", "up"], [".ring-meta", "up"]].forEach(function (p) {
+        var el = ring.querySelector(p[0]);
+        if (!el) return;
+        el.classList.add("reveal");
+        el.setAttribute("data-rv", p[1]);
+        el.style.setProperty("--d", "0ms");
+        parts.push(el);
+      });
+      ring._parts = parts;
+      io.observe(ring);
+    });
+
+    items.forEach(function (it) {
+      document.querySelectorAll(it[0]).forEach(function (el) {
+        el.classList.add("reveal");
+        el.setAttribute("data-rv", it[1]);
+        el.style.setProperty("--d", it[2] + "ms");
+        io.observe(el);
+      });
+    });
+  })();
+
+  // Last section: show only the top 80% of the footer image (cut the bottom 20%)
+  (function () {
+    var footer = document.querySelector(".footer");
+    if (!footer) return;
+    var KEEP = 0.8;                                  // fraction of the image height to keep
+    var img = new Image();
+    img.onload = function () {
+      footer.style.aspectRatio = img.naturalWidth + " / " + (img.naturalHeight * KEEP);
+    };
+    img.src = "https://framerusercontent.com/images/YSN8jyDT7Ocn99jskpAataqlrQc.png";
+  })();
+
+  // Last section aurora lights: same fast, dark green ripples from the middle as the first section
+  (function () {
+    var cv = document.querySelector(".aurora-f");
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext("2d");
+    var section = cv.parentElement;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ribbons = [
+      { c: "0,190,210", base: .66, amp: .16, f: 1.6, sp: 4.6,  ph: 0.0, h: .55, a: .85 },
+      { c: "0,160,200", base: .60, amp: .14, f: 2.4, sp: -5.4, ph: 2.0, h: .50, a: .70 },
+      { c: "10,205,220", base: .72, amp: .12, f: 1.1, sp: 3.8,  ph: 4.0, h: .45, a: .75 }
+    ];
+    var visible = false, last = 0, t0 = performance.now();
+
+    function size() {
+      var r = cv.getBoundingClientRect();
+      cv.width = Math.max(Math.round(r.width / 3), 60);
+      cv.height = Math.max(Math.round(r.height / 3), 30);
+    }
+
+    function draw(now) {
+      var t = (now - t0) / 1000, W = cv.width, H = cv.height, steps = 48;
+      var pulse = 1 + 0.25 * Math.sin(t * 2.6);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "lighter";
+      ribbons.forEach(function (r) {
+        var bot = [], top = [];
+        var amp = r.amp * (1 + 0.35 * Math.sin(t * 1.9 + r.ph));
+        for (var i = 0; i <= steps; i++) {
+          var x = i / steps;
+          var d = Math.abs(x - 0.5) * 2;           // 0 in the middle, 1 at the sides
+          var w1 = Math.sin(d * r.f * 6.283 - t * r.sp + r.ph);
+          var w2 = Math.sin(d * r.f * 2.1 * 6.283 - t * r.sp * 1.4 + r.ph * 1.7);
+          var yb = (r.base + amp * (0.7 * w1 + 0.3 * w2)) * H;
+          var hh = r.h * (0.7 + 0.3 * Math.sin(d * 6 - t * 3.4 + r.ph)) * (1 + 0.2 * (1 - d) * Math.sin(t * 4 + r.ph)) * H;
+          bot.push([x * W, yb]);
+          top.push([x * W, yb - hh]);
+        }
+        var a = Math.min(1, r.a * pulse);
+        var y0 = (r.base - r.h - r.amp * 1.4) * H, y1 = (r.base + r.amp * 1.4) * H;
+        var g = ctx.createLinearGradient(0, y0, 0, y1);
+        g.addColorStop(0, "rgba(" + r.c + ",0)");
+        g.addColorStop(0.6, "rgba(" + r.c + "," + (a * 0.5) + ")");
+        g.addColorStop(0.95, "rgba(" + r.c + "," + a + ")");
+        g.addColorStop(1, "rgba(" + r.c + "," + (a * 0.6) + ")");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.moveTo(bot[0][0], bot[0][1]);
+        for (var j = 1; j < bot.length; j++) ctx.lineTo(bot[j][0], bot[j][1]);
+        for (var k = top.length - 1; k >= 0; k--) ctx.lineTo(top[k][0], top[k][1]);
+        ctx.closePath();
+        ctx.fill();
+      });
+      ctx.globalCompositeOperation = "destination-in";
+      var m = ctx.createLinearGradient(0, 0, W, 0);
+      m.addColorStop(0, "rgba(0,0,0,.08)");
+      m.addColorStop(0.25, "rgba(0,0,0,.6)");
+      m.addColorStop(0.5, "rgba(0,0,0,1)");
+      m.addColorStop(0.75, "rgba(0,0,0,.6)");
+      m.addColorStop(1, "rgba(0,0,0,.08)");
+      ctx.fillStyle = m;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function loop(now) {
+      if (visible && now - last > 16) { last = now; draw(now); }
+      requestAnimationFrame(loop);
+    }
+
+    size();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { size(); draw(performance.now()); }).observe(cv);
+    }
+    if (reduce) { draw(t0 + 2000); return; }       // one still frame, no movement
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(section);
+    } else { visible = true; }
+    requestAnimationFrame(loop);
+  })();
+
+  // Live countdown: days, hours, minutes and seconds to the wedding
+  (function () {
+    var root = document.querySelector(".countdown");
+    if (!root) return;
+    // Wedding: December 31, 2026, 10:30 AM India time (IST, +05:30). Change this line to change the date.
+    var TARGET = new Date("2026-12-11T10:00:00+05:30").getTime();
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var nums = {};
+    root.querySelectorAll(".cd-num").forEach(function (n) { nums[n.getAttribute("data-unit")] = n; });
+    var caption = root.querySelector(".cd-caption");
+
+    function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+    function setVal(el, text) {
+      var cur = el.querySelector(".cur");
+      var old = cur.textContent;
+      if (old === text) return;
+      cur.textContent = text;
+      if (reduce) return;
+      var out = document.createElement("span");          // the old number floats away
+      out.className = "out";
+      out.textContent = old;
+      el.appendChild(out);
+      out.addEventListener("animationend", function () { out.remove(); });
+      cur.classList.remove("in");                        // the new number rises in
+      void cur.offsetWidth;
+      cur.classList.add("in");
+    }
+
+    function tick() {
+      var left = Math.max(0, TARGET - Date.now());
+      var s = Math.floor(left / 1000);
+      setVal(nums.days, pad(Math.floor(s / 86400)));
+      setVal(nums.hours, pad(Math.floor((s % 86400) / 3600)));
+      setVal(nums.minutes, pad(Math.floor((s % 3600) / 60)));
+      setVal(nums.seconds, pad(s % 60));
+      if (left === 0 && caption) caption.textContent = "Today is the big day";
+    }
+
+    function loop() {
+      tick();
+      setTimeout(loop, 1000 - (Date.now() % 1000) + 5);   // tick right on each second
+    }
+    // no flip on the very first paint: set the numbers first, then start animating
+    var first = Math.max(0, TARGET - Date.now()), fs = Math.floor(first / 1000);
+    nums.days.querySelector(".cur").textContent = pad(Math.floor(fs / 86400));
+    nums.hours.querySelector(".cur").textContent = pad(Math.floor((fs % 86400) / 3600));
+    nums.minutes.querySelector(".cur").textContent = pad(Math.floor((fs % 3600) / 60));
+    nums.seconds.querySelector(".cur").textContent = pad(fs % 60);
+    loop();
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) tick(); });
+  })();
+
+  // Make section 2 take the second image's own proportions at any width
+  (function () {
+    var s2 = document.querySelector(".section-2");
+    var img = new Image();
+    img.onload = function () {
+      s2.style.aspectRatio = img.naturalWidth + " / " + img.naturalHeight;
+    };
+    img.src = "https://framerusercontent.com/images/sJqR6OVqniA4os9dxzynmhlLp8.png";
+  })();
+
+  // Give each ring the frame image's real proportions so the frame is never squashed
+  (function () {
+    var probe = new Image();
+    probe.onload = function () {
+      var ratio = probe.naturalWidth + " / " + probe.naturalHeight;
+      document.querySelectorAll(".ring-art").forEach(function (box) {
+        box.style.aspectRatio = ratio;
+      });
+    };
+    probe.src = "https://framerusercontent.com/images/z5W1OnFP0tsTwdOyKZIKloLXPN4.png";
+  })();
+
+  // Scratch to reveal: rose-gold glitter heart that you scratch off with mouse or finger
+  (function () {
+    var card = document.querySelector(".scratch-card");
+    if (!card) return;
+    var cv = card.querySelector("canvas");
+    var ctx = cv.getContext("2d", { willReadFrequently: true });
+    var HEART = new Path2D("M50 90 C20 62 2 45 2 26 C2 12 13 3 26 3 C36 3 45 9 50 18 C55 9 64 3 74 3 C87 3 98 12 98 26 C98 45 80 62 50 90 Z");
+    var done = false, drawing = false, last = null, total = 1, lastW = 0, lastCheck = 0, seed = 11;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+
+    function opaqueCount() {
+      var w = cv.width, h = cv.height, d = ctx.getImageData(0, 0, w, h).data, n = 0;
+      for (var y = 0; y < h; y += 6) {
+        for (var x = 0; x < w; x += 6) { if (d[(y * w + x) * 4 + 3] > 128) n++; }
+      }
+      return n;
+    }
+
+    function paint() {
+      var r = card.getBoundingClientRect();
+      if (!r.width) return;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
+      cv.width = w; cv.height = h; lastW = r.width;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.save();
+      ctx.scale(w / 100, h / 95);
+      ctx.clip(HEART);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      var g = ctx.createRadialGradient(w * .5, h * .4, w * .05, w * .5, h * .5, w * .6);
+      g.addColorStop(0, "#c795e6");
+      g.addColorStop(.55, "#9a5bc4");
+      g.addColorStop(1, "#6a3796");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+      var cols = ["#ecd9fa", "#ffffff", "#43206a", "#b47ddc", "#d8b4f2"];
+      for (var i = 0; i < 1100; i++) {
+        ctx.globalAlpha = 0.5 + rnd() * 0.5;
+        ctx.fillStyle = cols[Math.floor(rnd() * cols.length)];
+        ctx.beginPath();
+        ctx.arc(rnd() * w, rnd() * h, (0.4 + rnd() * rnd() * 1.8) * dpr, 0, 6.2832);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      ctx.save();
+      ctx.scale(w / 100, h / 95);
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = "#d3aef0";
+      ctx.stroke(HEART);
+      ctx.restore();
+
+      total = Math.max(opaqueCount(), 1);
+    }
+
+    function pos(e) {
+      var r = cv.getBoundingClientRect();
+      return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height };
+    }
+    function scratch(a, b) {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = cv.width * 0.1;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      ctx.beginPath(); ctx.arc(b.x, b.y, cv.width * 0.05, 0, 6.2832); ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
+    }
+    function reveal() { done = true; card.classList.add("revealed"); }
+    function check() {
+      if (done) return;
+      if (opaqueCount() / total < 0.45) reveal();   // more than about 55% scratched
+    }
+
+    cv.addEventListener("pointerdown", function (e) {
+      if (done) return;
+      drawing = true;
+      last = pos(e);
+      cv.setPointerCapture(e.pointerId);
+      scratch(last, last);
+      cv.style.cursor = "grabbing";
+    });
+    cv.addEventListener("pointermove", function (e) {
+      if (!drawing || done) return;
+      var p = pos(e);
+      scratch(last, p);
+      last = p;
+      var now = Date.now();
+      if (now - lastCheck > 250) { lastCheck = now; check(); }
+    });
+    function stop() { if (drawing) { drawing = false; cv.style.cursor = "grab"; check(); } }
+    cv.addEventListener("pointerup", stop);
+    cv.addEventListener("pointercancel", stop);
+    cv.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); reveal(); }
+    });
+
+    paint();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () {
+        if (!done && Math.abs(card.getBoundingClientRect().width - lastW) > 1) paint();
+      }).observe(card);
+    }
+  })();
+
+  // Envelope: slide only the card down into the envelope while the page scrolls
+  (function () {
+    var wrap = document.querySelector(".map-pin-wrap");
+    if (!wrap) return;
+    var stage = wrap.querySelector(".map-pin-stick");
+    var queued = false;
+    function update() {
+      queued = false;
+      var LEAD = 0.12;                                        // start this much of a screen before the envelope settles; 0 = exactly when it settles
+      var lead = LEAD * window.innerHeight;
+      var span = wrap.offsetHeight - stage.offsetHeight;      // the extra scroll (about 100% of a screen)
+      var p = span > 0 ? Math.min(Math.max((lead - wrap.getBoundingClientRect().top) / (span + lead), 0), 1) : 1;
+      p = 1 - (1 - p) * (1 - p);                              // moves straight away, eases only at the end
+      wrap.style.setProperty("--pp", p.toFixed(3));
+    }
+    function onScroll() { if (!queued) { queued = true; requestAnimationFrame(update); } }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+  })();
+</script>
+</body>
+</html>
