@@ -17,6 +17,7 @@
     font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
     color: var(--cream);
   }
+
    #audio-toggle-btn {
     position: fixed;
     bottom: 20px;
@@ -572,6 +573,51 @@
     .greet span { animation: none; opacity: 0; }
     .greet span:first-child { opacity: 1; }
   }
+
+  /* Scroll hint: a small "Scroll" with flowing arrows at the bottom of the screen.
+     It fades away once the person starts scrolling and comes back at the very top. */
+  .scroll-hint {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    z-index: 9000;                /* above the page, below the music button and the confetti */
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: #fff3d2;
+    font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .8), 0 0 2px rgba(0, 0, 0, .7);
+    pointer-events: none;
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .scroll-hint.hide { opacity: 0; transform: translateX(-50%) translateY(14px); }
+  .scroll-hint span {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .38em;
+    text-transform: uppercase;
+    padding-left: .38em;
+  }
+  .scroll-hint svg {
+    display: block;
+    width: 22px;
+    height: 12px;
+    opacity: 0;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, .8));
+    animation: shFlow 1.6s ease-in-out infinite;
+  }
+  .scroll-hint svg:nth-of-type(2) { animation-delay: .22s; }
+  @keyframes shFlow {
+    0%   { opacity: 0; transform: translateY(-6px); }
+    40%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint svg { animation: none; opacity: .9; }
+    .scroll-hint { transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -745,6 +791,13 @@
       </div>
     </footer>
   </main>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l9 8 9-8"/></svg>
+    <svg viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l9 8 9-8"/></svg>
+  </div>
 
 <script>
 
@@ -1217,6 +1270,112 @@
     function onScroll() { if (!queued) { queued = true; requestAnimationFrame(update); } }
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    update();
+  })();
+</script>
+
+<script>
+  // Party poppers: confetti bursts when the scratch card is revealed
+  (function () {
+    var card = document.querySelector(".scratch-card");
+    if (!card) return;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var fired = false;
+
+    function pop() {
+      if (fired || reduce) return;            // once only; skipped if the person prefers reduced motion
+      fired = true;
+
+      var cv = document.createElement("canvas");
+      cv.setAttribute("aria-hidden", "true");
+      cv.style.cssText = "position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9998";
+      document.body.appendChild(cv);
+      var ctx = cv.getContext("2d");
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var W = cv.width = Math.round(window.innerWidth * dpr);
+      var H = cv.height = Math.round(window.innerHeight * dpr);
+
+      var colors = ["#f8edc4", "#e8c27a", "#c795e6", "#9a5bc4", "#ff8fb0", "#7fe8f5", "#ffffff", "#ffd166"];
+      var parts = [], pending = 0;
+
+      function burst(x, y, angle, spread, count, power) {
+        for (var i = 0; i < count; i++) {
+          var a = angle + (Math.random() - 0.5) * spread;
+          var sp = (0.35 + Math.random() * 0.65) * power * dpr;
+          parts.push({
+            x: x, y: y,
+            vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+            w: (5 + Math.random() * 6) * dpr, h: (3 + Math.random() * 5) * dpr,
+            rot: Math.random() * 6.283, vr: (Math.random() - 0.5) * 0.35,
+            tilt: Math.random() * 6.283, vt: 0.1 + Math.random() * 0.2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            round: Math.random() < 0.25,
+            life: 1, decay: 0.006 + Math.random() * 0.006
+          });
+        }
+      }
+      function later(ms, fn) { pending++; setTimeout(function () { fn(); pending--; }, ms); }
+
+      var r = card.getBoundingClientRect();
+      var cx = (r.left + r.width / 2) * dpr, cy = (r.top + r.height / 2) * dpr;
+      var up = -Math.PI / 2;
+
+      burst(cx, cy, up, Math.PI * 1.2, 110, 16);                         // pop from the heart
+      later(120, function () { burst(0, H, up + 0.55, 0.7, 70, 30); });   // left party popper
+      later(120, function () { burst(W, H, up - 0.55, 0.7, 70, 30); });   // right party popper
+      later(520, function () { burst(cx, cy, up, Math.PI * 1.4, 70, 13); });   // second small pop
+
+      var last = performance.now();
+      function frame(now) {
+        var dt = Math.min((now - last) / 16.67, 3);                      // keeps speed steady on any screen
+        last = now;
+        ctx.clearRect(0, 0, W, H);
+        var alive = 0;
+        for (var i = 0; i < parts.length; i++) {
+          var p = parts[i];
+          if (p.life <= 0) continue;
+          alive++;
+          p.vx *= Math.pow(0.985, dt);
+          p.vy = p.vy * Math.pow(0.985, dt) + 0.32 * dpr * dt;           // gravity
+          p.x += p.vx * dt; p.y += p.vy * dt;
+          p.rot += p.vr * dt; p.tilt += p.vt * dt;
+          p.life -= p.decay * dt;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 1.6));
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.scale(1, Math.cos(p.tilt));                                // paper flutter
+          ctx.fillStyle = p.color;
+          if (p.round) { ctx.beginPath(); ctx.arc(0, 0, p.w / 2.2, 0, 6.283); ctx.fill(); }
+          else { ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); }
+          ctx.restore();
+        }
+        if (alive > 0 || pending > 0) requestAnimationFrame(frame);
+        else cv.remove();                                                // tidy up when finished
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // The existing code adds the class "revealed" to the card when the date is uncovered
+    // (by scratching, or by pressing Enter). Watch for that and pop.
+    new MutationObserver(function () {
+      if (card.classList.contains("revealed")) pop();
+    }).observe(card, { attributes: true, attributeFilter: ["class"] });
+  })();
+</script>
+
+<script>
+  // Scroll hint: show it at the top of the page, fade it out once the person scrolls
+  (function () {
+    var hint = document.querySelector(".scroll-hint");
+    if (!hint) return;
+    var queued = false;
+    function update() {
+      queued = false;
+      hint.classList.toggle("hide", window.scrollY > 80);
+    }
+    function onScroll() { if (!queued) { queued = true; requestAnimationFrame(update); } }
+    window.addEventListener("scroll", onScroll, { passive: true });
     update();
   })();
 </script>
